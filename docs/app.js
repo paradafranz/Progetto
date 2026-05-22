@@ -2,7 +2,9 @@
    Moodflix 2.0 — app.js
    ══════════════════════════════════════════════ */
 
-const API = "http://localhost:3000";
+const API = window.location.hostname === "localhost"
+  ? "http://localhost:3000"
+  : "https://tpsi-verifica.onrender.com";
 let moviesCache = [];
 let currentAudio = null;
 
