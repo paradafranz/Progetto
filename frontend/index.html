@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moodflix 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">▶</span>
+        <span class="logo-text">MOODFLIX</span>
+        <span class="logo-version">2.0</span>
+      </div>
+      <p class="header-sub">Film &amp; Musica — tutto in un posto</p>
+    </div>
+    <nav class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('movies')">🎬 Film</button>
+      <button class="tab-btn"        onclick="switchTab('music')">🎵 Musica</button>
+      <button class="tab-btn"        onclick="switchTab('favorites')">❤️ Preferiti</button>
+    </nav>
+  </header>
+
+  <main class="main-wrapper">
+
+    <!-- ═══ TAB FILM ═══ -->
+    <section class="tab-panel active" id="tab-movies">
+      <div class="controls-row">
+        <div class="input-wrapper">
+          <span class="input-icon">🔍</span>
+          <input id="movie-input" class="control-input" placeholder="Cerca un titolo…"
+            onkeydown="if(event.key==='Enter')searchMovies()" />
+        </div>
+        <div class="select-wrapper">
+          <select id="movie-genre" class="control-select">
+            <option value="">Tutti i generi</option>
+            <option value="28">Azione</option>
+            <option value="35">Commedia</option>
+            <option value="18">Drammatico</option>
+            <option value="27">Horror</option>
+            <option value="878">Fantascienza</option>
+            <option value="10749">Romance</option>
+            <option value="16">Animazione</option>
+            <option value="99">Documentario</option>
+          </select>
+        </div>
+        <div class="select-wrapper">
+          <select id="movie-sort" class="control-select">
+            <option value="popularity.desc">Più popolari</option>
+            <option value="release_date.desc">Più recenti</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="searchMovies()">Cerca</button>
+      </div>
+      <div id="recent-movies" class="recent-searches"></div>
+      <div id="movies-loading" class="loading-bar hidden"></div>
+      <div id="movies" class="movies-grid"></div>
+    </section>
+
+    <!-- ═══ TAB MUSICA ═══ -->
+    <section class="tab-panel" id="tab-music">
+      <!-- Ricerca brani -->
+      <div class="controls-row">
+        <div class="input-wrapper">
+          <span class="input-icon">🎵</span>
+          <input id="music-input" class="control-input" placeholder="Artista, brano o mood…"
+            onkeydown="if(event.key==='Enter')searchMusic()" />
+        </div>
+        <div class="select-wrapper">
+          <select id="music-sort" class="control-select">
+            <option value="RANKING">Più popolari</option>
+            <option value="TRACK_ASC">A–Z (Brano)</option>
+            <option value="ARTIST_ASC">A–Z (Artista)</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="searchMusic()">Cerca</button>
+      </div>
+      <div id="recent-music" class="recent-searches"></div>
+      <div class="chart-label" id="chart-label">🔥 Trending Globale · Deezer</div>
+      <div id="music-loading" class="loading-bar hidden"></div>
+      <div id="music" class="music-grid"></div>
+
+      <!-- ─── SEZIONE CONCERTI ─── -->
+      <div class="concerts-inline-section" id="concerts-section">
+        <div class="concerts-section-header">
+          <h3 class="concerts-inline-title"><span class="accent-bar"></span>🎤 Concerti</h3>
+          <p class="concerts-sub">Powered by Ticketmaster · Cerca per artista o per città</p>
+        </div>
+
+        <div class="concerts-two-col">
+
+          <!-- ── Per artista ── -->
+          <div class="concerts-block">
+            <div class="concerts-block-label">🎤 Per Artista</div>
+            <div class="concert-search-group">
+              <div class="input-wrapper">
+                <span class="input-icon">🔍</span>
+                <input id="concert-artist-input" class="control-input"
+                  placeholder="Es. Coldplay, Måneskin, Taylor Swift…"
+                  onkeydown="if(event.key==='Enter')searchConcertsByArtist()" />
+              </div>
+              <div class="concert-filters-row">
+                <div class="concert-filter-group">
+                  <label class="filter-label">Dal</label>
+                  <input type="date" id="ca-date-from" class="control-input filter-date" />
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">Al</label>
+                  <input type="date" id="ca-date-to" class="control-input filter-date" />
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">Paese</label>
+                  <div class="select-wrapper">
+                    <select id="ca-country" class="control-select filter-select">
+                      <option value="">Tutti</option>
+                      <option value="IT">🇮🇹 Italia</option>
+                      <option value="US">🇺🇸 USA</option>
+                      <option value="GB">🇬🇧 UK</option>
+                      <option value="DE">🇩🇪 Germania</option>
+                      <option value="FR">🇫🇷 Francia</option>
+                      <option value="ES">🇪🇸 Spagna</option>
+                      <option value="NL">🇳🇱 Olanda</option>
+                      <option value="CH">🇨🇭 Svizzera</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">N°</label>
+                  <div class="select-wrapper">
+                    <select id="ca-size" class="control-select filter-select">
+                      <option value="10">10</option>
+                      <option value="20" selected>20</option>
+                      <option value="50">50</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-primary btn-concert-search" onclick="searchConcertsByArtist()">Cerca Concerti</button>
+            </div>
+            <div id="concerts-artist-loading" class="loading-bar hidden" style="margin-top:10px"></div>
+            <div id="concerts-artist-results" class="concerts-results-panel"></div>
+          </div>
+
+          <!-- ── Per città ── -->
+          <div class="concerts-block">
+            <div class="concerts-block-label">📍 Per Città</div>
+            <div class="concert-search-group">
+              <div class="input-wrapper">
+                <span class="input-icon">🏙️</span>
+                <input id="concert-city-input" class="control-input"
+                  placeholder="Es. Milano, Roma, Torino…"
+                  onkeydown="if(event.key==='Enter')searchConcertsByCity()" />
+              </div>
+              <div class="concert-filters-row">
+                <div class="concert-filter-group">
+                  <label class="filter-label">Dal</label>
+                  <input type="date" id="cc-date-from" class="control-input filter-date" />
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">Al</label>
+                  <input type="date" id="cc-date-to" class="control-input filter-date" />
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">Paese</label>
+                  <div class="select-wrapper">
+                    <select id="cc-country" class="control-select filter-select">
+                      <option value="">Auto</option>
+                      <option value="IT" selected>🇮🇹 Italia</option>
+                      <option value="US">🇺🇸 USA</option>
+                      <option value="GB">🇬🇧 UK</option>
+                      <option value="DE">🇩🇪 Germania</option>
+                      <option value="FR">🇫🇷 Francia</option>
+                      <option value="ES">🇪🇸 Spagna</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="concert-filter-group">
+                  <label class="filter-label">Genere</label>
+                  <div class="select-wrapper">
+                    <select id="cc-genre" class="control-select filter-select">
+                      <option value="Music">Tutti</option>
+                      <option value="Rock">Rock</option>
+                      <option value="Pop">Pop</option>
+                      <option value="Hip-Hop/Rap">Hip-Hop</option>
+                      <option value="R&amp;B">R&amp;B</option>
+                      <option value="Electronic">Electronic</option>
+                      <option value="Metal">Metal</option>
+                      <option value="Jazz">Jazz</option>
+                      <option value="Classical">Classica</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-primary btn-concert-search" onclick="searchConcertsByCity()">Cerca Concerti</button>
+            </div>
+            <div id="concerts-city-loading" class="loading-bar hidden" style="margin-top:10px"></div>
+            <div id="concerts-city-results" class="concerts-results-panel"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- (tab concerti rimosso — sezione spostata nel tab musica) -->
+
+    <!-- ═══ TAB PREFERITI ═══ -->
+    <section class="tab-panel" id="tab-favorites">
+      <div class="fav-columns">
+        <div class="fav-col">
+          <h3 class="fav-heading"><span class="accent-bar"></span>Film preferiti</h3>
+          <div id="fav-movies" class="movies-grid fav-grid"></div>
+        </div>
+        <div class="fav-col">
+          <h3 class="fav-heading"><span class="accent-bar"></span>Musica preferita</h3>
+          <div id="fav-music" class="music-grid fav-grid"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════ MODAL FILM ══════════════ -->
+  <div id="modal-movie" class="modal hidden" onclick="closeMovieModal(event)">
+    <div class="modal-box movie-modal-box">
+      <button class="modal-close" onclick="closeMovieModal()">✕</button>
+      <div id="modal-movie-content" class="movie-modal-inner"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL MUSICA ══════════════ -->
+  <div id="modal-music" class="modal hidden" onclick="closeMusicModal(event)">
+    <div class="modal-box music-modal-box">
+      <button class="modal-close" onclick="closeMusicModal()">✕</button>
+      <div class="music-modal-header" id="music-modal-header"></div>
+      <div class="music-video-section" id="music-video-section">
+        <div class="video-loading-state" id="video-loading">
+          <div class="video-spinner"></div><span>Caricamento video…</span>
+        </div>
+        <div class="yt-frame-wrapper hidden" id="yt-wrapper">
+          <iframe id="yt-iframe" src="" frameborder="0"
+            allow="autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="music-player-area" id="music-player-area"></div>
+      <div class="music-extra-stats" id="music-extra-stats"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL ARTISTA ══════════════ -->
+  <div id="modal-artist" class="modal hidden" onclick="closeArtistModal(event)">
+    <div class="modal-box artist-modal-box">
+      <button class="modal-close" onclick="closeArtistModal()">✕</button>
+      <div id="modal-artist-content"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL ALBUM ══════════════ -->
+  <div id="modal-album" class="modal hidden" onclick="closeAlbumModal(event)">
+    <div class="modal-box album-modal-box">
+      <button class="modal-close" onclick="closeAlbumModal()">✕</button>
+      <div id="modal-album-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
